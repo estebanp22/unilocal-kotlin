@@ -1,3 +1,35 @@
 <resources>
     <string name="app_name">UniLocal</string>
+
+    <!-- Formulario de Login -->
+    <string name="txt_image">Logo UniLocal</string>
+    <string name="txt_email">Correo electrónico</string>
+    <string name="txt_email_error">Ingrese un correo válido</string>
+    <string name="txt_password">Contraseña</string>
+    <string name="txt_password_error">La contraseña debe tener mínimo 5 caracteres</string>
+    <string name="btn_login">Iniciar sesión</string>
+    <string name="btn_create_account">Crear cuenta</string>
+    <string name="btn_register">Registrar</string>
+    <string name="toast_welcome">Bienvenido</string>
+    <string name="toast_invalid_credentials">Correo o contraseña incorrectos</string>
+
+
+    <!-- Formulario de Registro -->
+    <string name="txt_name">Nombre completo</string>
+    <string name="txt_phone_number">Número de teléfono</string>
+    <string name="txt_country">Seleccione el país</string>
+    <string name="txt_confirm_password">Confirmar contraseña</string>
+    <string name="txt_city">Seleccione la ciudad</string>
+    <string name="txt_name_error">El nombre es obligatorio</string>
+    <string name="txt_phone_number_error">El número de teléfono es obligatorio</string>
+    <string name="txt_confirm_password_error">Las contraseñas no coinciden</string>
+    <string name="txt_city_error">La ciudad es obligatoria</string>
+
+    <string name="title_user">Inicio usuario</string>
+    <string name="menu_home">Inicio</string>
+    <string name="menu_search">Búsqueda</string>
+    <string name="menu_my_places">Mis lugares</string>
+    <string name="menu_profile">Perfil</string>
+
+
 </resources>

@@ -11,22 +11,43 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.unilocal.app.ui.NavRoutes
 import com.unilocal.app.ui.screens.LoginScreen
+import com.unilocal.app.ui.screens.RegisterScreen
 import com.unilocal.app.ui.theme.UniLocalTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            // Aquí sí puedes llamar composables
-            LoginScreen(
-                onNavigateToRegister = {
-                    // Navegación a registro
-                },
-                onNavigateToHome = {
-                    // Navegación a home
-                }
-            )
+            UniLocalApp()
         }
     }
 }
+
+@Composable
+fun UniLocalApp() {
+    val navController = rememberNavController()
+
+    NavHost(
+        navController = navController,
+        startDestination = NavRoutes.Login.route
+    ) {
+        composable(NavRoutes.Login.route) {
+            LoginScreen(
+                onNavigateToRegister = { navController.navigate(NavRoutes.Register.route) },
+                onNavigateToHome = { navController.navigate(NavRoutes.Home.route) }
+            )
+        }
+        composable(NavRoutes.Register.route) {
+            RegisterScreen(
+                onRegister = { navController.navigate(NavRoutes.Home.route) }
+            )
+        }
+       
+    }
+}
+

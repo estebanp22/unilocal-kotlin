@@ -18,6 +18,9 @@
 
     <!-- Formulario de Registro -->
     <string name="txt_name">Nombre completo</string>
+    <string name="txt_only_name">Nombres</string>
+    <string name="txt_only_last_name">Apellidos</string>
+    <string name="txt_date">Fecha de Nacimiento</string>
     <string name="txt_phone_number">Número de teléfono</string>
     <string name="txt_country">Seleccione el país</string>
     <string name="txt_confirm_password">Confirmar contraseña</string>
@@ -28,12 +31,46 @@
     <string name="txt_city_error">La ciudad es obligatoria</string>
     <string name="txt_email_error">El email es incorrecto</string>
     <string name="txt_password_error">La contraseña es incorrecta</string>
+    <string name="txt_edit">Editar</string>
 
     <string name="title_user">Inicio usuario</string>
     <string name="menu_home">Inicio</string>
     <string name="menu_search">Búsqueda</string>
     <string name="menu_my_places">Mis lugares</string>
     <string name="menu_profile">Perfil</string>
+
+    <!-- Home -->
+    <string name="txt_mapas">Mapas</string>
+    <string name="txt_search_place">Buscar un lugar</string>
+
+    <!-- Bottom navigation -->
+    <string name="nav_favorites">Favoritos</string>
+    <string name="nav_add_places">Agregar lugares</string>
+    <string name="nav_my_places">Mis lugares</string>
+
+    <!-- Content descriptions -->
+    <string name="cd_profile">Perfil</string>
+    <string name="cd_favorites">Favoritos</string>
+    <string name="cd_add_place">Agregar lugar</string>
+    <string name="cd_my_places">Mis lugares</string>
+    <string name="cd_search">Buscar</string>
+
+    <!-- RegisterPlace -->
+    <string name="register_place_title">Registra un lugar</string>
+    <string name="place_name">Nombre</string>
+    <string name="place_category">Categoría</string>
+    <string name="place_description">Descripción</string>
+    <string name="place_phone">Teléfonos</string>
+    <string name="upload_images">Subir imágenes</string>
+    <string name="add_schedule">Agregar horarios</string>
+    <string name="register">Registrar</string>
+    <string name="nav_add_place">Agregar Lugar</string>
+
+    <string name="editar_datos">Editar datos</string>
+    <string name="cerrar_sesion">Cerrar Sesión</string>
+    <string name="editar">Editar</string>
+    <string name="cuenta">Cuenta</string>
+
 
 
 </resources>

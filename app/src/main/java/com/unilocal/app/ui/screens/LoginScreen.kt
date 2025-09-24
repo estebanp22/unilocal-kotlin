@@ -60,7 +60,7 @@ fun LoginScreen(
 
             // Logo
             Image(
-                painter = painterResource(id = R.drawable.ic_launcher_foreground), // cambia por tu logo
+                painter = painterResource(id = R.drawable.logo_app),
                 contentDescription = stringResource(R.string.txt_logo),
                 modifier = Modifier.size(150.dp)
             )
@@ -107,7 +107,7 @@ fun LoginScreen(
                         }
                     },
                     modifier = Modifier.fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF7B1FA2)) // morado
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF7B1FA2))
                 ) {
                     Icon(Icons.Default.ArrowForward, contentDescription = null)
                     Spacer(modifier = Modifier.width(8.dp))

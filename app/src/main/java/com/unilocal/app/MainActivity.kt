@@ -46,7 +46,7 @@ fun UniLocalApp() {
             )
         }
         composable(NavRoutes.Register.route) {
-            RegisterScreen(
+            RegisterScreen(navController = navController,
                 onRegister = { navController.navigate(NavRoutes.Home.route) }
             )
         }
@@ -57,7 +57,7 @@ fun UniLocalApp() {
             RegisterPlaceScreen(navController = navController)
         }
         composable(NavRoutes.EditProfile.route) {
-            EditProfileScreen(onSave = {
+            EditProfileScreen(navController = navController, onSave = {
                 navController.navigate(NavRoutes.Home.route)
             }
             )

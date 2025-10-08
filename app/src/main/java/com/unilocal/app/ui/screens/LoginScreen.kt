@@ -34,14 +34,18 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.unilocal.app.R
+import com.unilocal.app.model.User
+import com.unilocal.app.viewmodel.UsersViewModel
 
 @Composable
 fun LoginScreen(
     onNavigateToRegister: () -> Unit,
-    onNavigateToHome: () -> Unit
+    onNavigateToHome: () -> Unit,
+    usersViewModel: UsersViewModel = viewModel()
 ) {
-    var username by rememberSaveable { mutableStateOf("") }
+    var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
     val context = LocalContext.current
 
@@ -58,7 +62,6 @@ fun LoginScreen(
         ) {
             Spacer(modifier = Modifier.height(40.dp))
 
-            // Logo
             Image(
                 painter = painterResource(id = R.drawable.logo_app),
                 contentDescription = stringResource(R.string.txt_logo),
@@ -70,9 +73,9 @@ fun LoginScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 OutlinedTextField(
-                    value = username,
-                    onValueChange = { username = it },
-                    label = { Text(stringResource(R.string.txt_username)) },
+                    value = email,
+                    onValueChange = { email = it },
+                    label = { Text(stringResource(R.string.txt_email)) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true
                 )
@@ -99,11 +102,12 @@ fun LoginScreen(
             ) {
                 Button(
                     onClick = {
-                        if (username.isNotBlank() && password.length >= 5) {
-                            Toast.makeText(context, "Bienvenido $username", Toast.LENGTH_SHORT).show()
+                        val user: User? = usersViewModel.login(email.trim(), password)
+                        if (user != null) {
+                            Toast.makeText(context, "Bienvenido ${user.name}", Toast.LENGTH_SHORT).show()
                             onNavigateToHome()
                         } else {
-                            Toast.makeText(context, "Datos inválidos", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Correo o contraseña incorrectos", Toast.LENGTH_SHORT).show()
                         }
                     },
                     modifier = Modifier.fillMaxWidth(),
@@ -115,7 +119,7 @@ fun LoginScreen(
                 }
 
                 OutlinedButton(
-                    onClick = { onNavigateToRegister() },
+                    onClick = onNavigateToRegister,
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.outlinedButtonColors(contentColor = Color(0xFF7B1FA2))
                 ) {
@@ -125,4 +129,3 @@ fun LoginScreen(
         }
     }
 }
-

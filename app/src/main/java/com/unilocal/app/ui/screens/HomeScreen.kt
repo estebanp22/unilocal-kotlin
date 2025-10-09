@@ -109,7 +109,7 @@ fun HomeScreen(navController: NavController) {
                 )
                 NavigationBarItem(
                     selected = false,
-                    onClick = { /* TODO Mis lugares */ },
+                    onClick = {navController.navigate(NavRoutes.MyPlaces.route)},
                     icon = {
                         Icon(
                             imageVector = Icons.Default.Place,

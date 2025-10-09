@@ -18,6 +18,7 @@ import com.unilocal.app.ui.NavRoutes
 import com.unilocal.app.ui.screens.EditProfileScreen
 import com.unilocal.app.ui.screens.HomeScreen
 import com.unilocal.app.ui.screens.LoginScreen
+import com.unilocal.app.ui.screens.MyPlacesScreen
 import com.unilocal.app.ui.screens.RegisterPlaceScreen
 import com.unilocal.app.ui.screens.RegisterScreen
 import com.unilocal.app.ui.theme.UniLocalTheme
@@ -56,6 +57,24 @@ fun UniLocalApp() {
         composable(NavRoutes.RegisterPlace.route) {
             RegisterPlaceScreen(navController = navController)
         }
+        composable(NavRoutes.MyPlaces.route) {
+            //val placesViewModel: PlacesViewModel = viewModel()
+
+            MyPlacesScreen(
+                //userId = FirebaseAuth.getInstance().currentUser?.uid ?: "",
+                userId = "3",
+                onEditPlace = { placeId ->
+                    navController.navigate("edit_place/$placeId")
+                },
+                onDeletePlace = { placeId ->
+                    //placesViewModel.deletePlace(placeId)
+                },
+                onBack = { navController.popBackStack() }, // 🔹 acción volver
+                //placesViewModel = placesViewModel
+            )
+        }
+
+
         composable(NavRoutes.EditProfile.route) {
             EditProfileScreen(navController = navController, onSave = {
                 navController.navigate(NavRoutes.Home.route)

@@ -7,5 +7,6 @@ sealed class NavRoutes(val route: String) {
     object RegisterPlace : NavRoutes("register_place")
 
     object EditProfile : NavRoutes("editProfile")
+    object MyPlaces : NavRoutes("myPlaces")
 
 }

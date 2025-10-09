@@ -1,0 +1,160 @@
+package com.unilocal.app.ui.screens
+
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Place
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
+import com.unilocal.app.viewmodel.PlacesViewModel
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MyPlacesScreen(
+    userId: String,
+    onEditPlace: (String) -> Unit = {},
+    onDeletePlace: (String) -> Unit = {},
+    onBack: () -> Unit = {}, // 🔹 nuevo parámetro
+    placesViewModel: PlacesViewModel = viewModel()
+) {
+    val places by placesViewModel.places.collectAsState()
+    val userPlaces = remember(places) { places.filter { it.ownerId == userId } }
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        "Lugares que has publicado",
+                        color = Color(0xFF7B1FA2),
+                        fontWeight = FontWeight.SemiBold
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = onBack) { // 🔹 aquí usamos el callback
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack, // 🔹 flecha real
+                            contentDescription = "Volver",
+                            tint = Color(0xFF7B1FA2)
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
+            )
+        }
+    ) { paddingValues ->
+        if (userPlaces.isEmpty()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "Aún no has publicado ningún lugar",
+                    color = Color.Gray
+                )
+            }
+        } else {
+            LazyColumn(
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .padding(16.dp)
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.spacedBy(24.dp)
+            ) {
+                items(userPlaces) { place ->
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(16.dp),
+                        elevation = CardDefaults.cardElevation(4.dp)
+                    ) {
+                        Column {
+                            AsyncImage(
+                                model = place.images.firstOrNull(),
+                                contentDescription = place.title,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(180.dp),
+                                contentScale = ContentScale.Crop
+                            )
+
+                            Column(modifier = Modifier.padding(16.dp)) {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Text(
+                                        text = place.title,
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 18.sp
+                                    )
+                                    Text(
+                                        text = "5/5",
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 16.sp
+                                    )
+                                }
+
+                                Text(
+                                    text = "${place.city.name}, ${place.type.name}",
+                                    color = Color.Gray,
+                                    fontSize = 14.sp,
+                                    modifier = Modifier.padding(top = 4.dp)
+                                )
+
+                                Text(
+                                    text = place.description,
+                                    fontSize = 14.sp,
+                                    color = Color.DarkGray,
+                                    maxLines = 3,
+                                    overflow = TextOverflow.Ellipsis,
+                                    modifier = Modifier.padding(vertical = 8.dp)
+                                )
+
+                                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                                    OutlinedButton(
+                                        onClick = { onEditPlace(place.id) },
+                                        shape = RoundedCornerShape(8.dp)
+                                    ) {
+                                        Icon(Icons.Default.Edit, contentDescription = null)
+                                        Spacer(modifier = Modifier.width(4.dp))
+                                        Text("Editar")
+                                    }
+
+                                    Button(
+                                        onClick = { onDeletePlace(place.id) },
+                                        colors = ButtonDefaults.buttonColors(
+                                            containerColor = Color(0xFFFF6B6B)
+                                        ),
+                                        shape = RoundedCornerShape(8.dp)
+                                    ) {
+                                        Icon(Icons.Default.Delete, contentDescription = null)
+                                        Spacer(modifier = Modifier.width(4.dp))
+                                        Text("Eliminar")
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

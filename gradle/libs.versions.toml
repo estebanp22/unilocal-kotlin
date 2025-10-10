@@ -19,6 +19,9 @@ lifecycle = "2.8.6"
 foundation = "1.9.1"
 runtime = "1.9.1"
 foundationLayout = "1.9.1"
+runtimeSaveableVersion = "1.9.3"
+uiTextVersion = "1.9.3"
+material3Version = "1.4.0"
 
 
 
@@ -50,6 +53,9 @@ androidx-lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-lived
 androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "foundation" }
 androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "runtime" }
 androidx-compose-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout", version.ref = "foundationLayout" }
+androidx-runtime-saveable = { group = "androidx.compose.runtime", name = "runtime-saveable", version.ref = "runtimeSaveableVersion" }
+androidx-ui-text = { group = "androidx.compose.ui", name = "ui-text", version.ref = "uiTextVersion" }
+material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3Version" }
 
 
 [plugins]

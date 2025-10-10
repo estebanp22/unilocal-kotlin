@@ -1,4 +1,4 @@
-package com.unilocal.app.ui.screens
+package com.unilocal.app.ui.screens.user
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -6,10 +6,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Place
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -20,24 +18,40 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.unilocal.app.viewmodel.LocalMainViewModel
-import com.unilocal.app.viewmodel.PlacesViewModel
+import androidx.navigation.NavController
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyPlacesScreen(
-    userId: String,
-    onEditPlace: (String) -> Unit = {},
-    onDeletePlace: (String) -> Unit = {},
-    onBack: () -> Unit = {}
-) {
+fun MyPlacesScreen(navController: NavController) {
     val mainViewModel = LocalMainViewModel.current
+    val usersViewModel = mainViewModel.usersViewModel
     val placesViewModel = mainViewModel.placesViewModel
 
-    val places by placesViewModel.places.collectAsState()
-    val userPlaces = remember(places) { places.filter { it.ownerId == userId } }
+    val currentUser = usersViewModel.currentUser.collectAsState().value
+    val allPlaces by placesViewModel.places.collectAsState()
+
+    // Estado para controlar la alerta de confirmación
+    var showDeleteDialog by remember { mutableStateOf(false) }
+    var placeToDeleteId by remember { mutableStateOf<String?>(null) }
+
+    // Filtra automáticamente cada vez que cambie la lista o el usuario
+    val userPlaces = remember(allPlaces, currentUser) {
+        allPlaces.filter { it.ownerId == currentUser?.id }
+    }
+
+    // Si no hay usuario logueado
+    if (currentUser == null) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text("No hay un usuario logueado.")
+        }
+        return
+    }
 
     Scaffold(
         topBar = {
@@ -50,9 +64,9 @@ fun MyPlacesScreen(
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = onBack) { // 🔹 aquí usamos el callback
+                    IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
-                            imageVector = Icons.Default.ArrowBack, // 🔹 flecha real
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Volver",
                             tint = Color(0xFF7B1FA2)
                         )
@@ -133,7 +147,9 @@ fun MyPlacesScreen(
 
                                 Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                                     OutlinedButton(
-                                        onClick = { onEditPlace(place.id) },
+                                        onClick = {
+                                            // TODO: Editar lugar
+                                        },
                                         shape = RoundedCornerShape(8.dp)
                                     ) {
                                         Icon(Icons.Default.Edit, contentDescription = null)
@@ -142,7 +158,10 @@ fun MyPlacesScreen(
                                     }
 
                                     Button(
-                                        onClick = { onDeletePlace(place.id) },
+                                        onClick = {
+                                            placeToDeleteId = place.id
+                                            showDeleteDialog = true
+                                        },
                                         colors = ButtonDefaults.buttonColors(
                                             containerColor = Color(0xFFFF6B6B)
                                         ),
@@ -159,5 +178,28 @@ fun MyPlacesScreen(
                 }
             }
         }
+    }
+
+    // Diálogo de confirmación de eliminación
+    if (showDeleteDialog && placeToDeleteId != null) {
+        AlertDialog(
+            onDismissRequest = { showDeleteDialog = false },
+            confirmButton = {
+                TextButton(onClick = {
+                    placesViewModel.deletePlace(placeToDeleteId!!)
+                    showDeleteDialog = false
+                    placeToDeleteId = null
+                }) {
+                    Text("Eliminar", color = Color.Red)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDeleteDialog = false }) {
+                    Text("Cancelar")
+                }
+            },
+            title = { Text("Confirmar eliminación") },
+            text = { Text("¿Seguro que deseas eliminar este lugar? Esta acción no se puede deshacer.") }
+        )
     }
 }

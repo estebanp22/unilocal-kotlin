@@ -26,8 +26,8 @@ class PlacesViewModel: ViewModel() {
         _places.value = listOf(
             Place(
                 id = "1",
-                title = "Restaurante El paisa",
-                description = "El mejor restaurante paisa",
+                title = "El Fogón Paisa",
+                description = "Sabores auténticos de la región antioqueña con el mejor ambiente familiar.",
                 address = "Cra 12 # 12 - 12",
                 location = Location(1.23, 2.34),
                 images = listOf(
@@ -49,8 +49,8 @@ class PlacesViewModel: ViewModel() {
             ),
             Place(
                 id = "2",
-                title = "Bar test 1",
-                description = "Un bar test",
+                title = "Bar La Esquina",
+                description = "Un bar moderno con buena música, cocteles artesanales y ambiente relajado.",
                 address = "Calle 12 # 12 - 12",
                 location = Location(1.23, 2.34),
                 images = listOf("https://cdn0.uncomo.com/es/posts/6/8/4/como_gestionar_un_bar_22486_orig.jpg"),
@@ -62,8 +62,8 @@ class PlacesViewModel: ViewModel() {
             ),
             Place(
                 id = "3",
-                title = "Hotel de prueba",
-                description = "Un bar test",
+                title = "Hotel Mirador del Sol",
+                description = "Descanso, confort y vistas increíbles en el corazón de la ciudad.",
                 address = "Calle 12 # 12 - 12",
                 location = Location(1.23, 2.34),
                 images = listOf("https://cdn0.uncomo.com/es/posts/6/8/4/como_gestionar_un_bar_22486_orig.jpg"),
@@ -75,8 +75,8 @@ class PlacesViewModel: ViewModel() {
             ),
             Place(
                 id = "4",
-                title = "Shopping test 1",
-                description = "Un bar test",
+                title = "Centro Comercial Andino Plaza",
+                description = "Un lugar perfecto para compras, gastronomía y entretenimiento en un solo sitio.",
                 address = "Calle 12 # 12 - 12",
                 location = Location(1.23, 2.34),
                 images = listOf("https://cdn0.uncomo.com/es/posts/6/8/4/como_gestionar_un_bar_22486_orig.jpg"),
@@ -88,8 +88,8 @@ class PlacesViewModel: ViewModel() {
             ),
             Place(
                 id = "5",
-                title = "Shopping test 2",
-                description = "Un bar test",
+                title = "Galería Capital",
+                description = "Centro comercial con marcas exclusivas, arte urbano y espacios gastronómicos únicos.",
                 address = "Calle 12 # 12 - 12",
                 location = Location(1.23, 2.34),
                 images = listOf("https://cdn0.uncomo.com/es/posts/6/8/4/como_gestionar_un_bar_22486_orig.jpg"),
@@ -101,8 +101,8 @@ class PlacesViewModel: ViewModel() {
             ),
             Place(
                 id = "6",
-                title = "Parque de prueba",
-                description = "Un bar test",
+                title = "Parque Los Cedros",
+                description = "Espacio natural ideal para pasear, hacer deporte o disfrutar de un picnic en familia.",
                 address = "Calle 12 # 12 - 12",
                 location = Location(1.23, 2.34),
                 images = listOf("https://cdn0.uncomo.com/es/posts/6/8/4/como_gestionar_un_bar_22486_orig.jpg"),
@@ -113,6 +113,7 @@ class PlacesViewModel: ViewModel() {
                 ownerId = "3"
             )
         )
+
 
     }
 
@@ -130,6 +131,16 @@ class PlacesViewModel: ViewModel() {
 
     fun findByName(name: String): List<Place>{
         return _places.value.filter { it.title.contains(other = name, ignoreCase = true) }
+    }
+
+    // Retorna los lugares de un usuario específico
+    fun getPlacesByUser(userId: String): List<Place> {
+        return _places.value.filter { it.ownerId == userId }
+    }
+
+    // Elimina un lugar por ID
+    fun deletePlace(placeId: String) {
+        _places.value = _places.value.filterNot { it.id == placeId }
     }
 
 }

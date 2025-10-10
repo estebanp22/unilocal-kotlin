@@ -1,6 +1,5 @@
-package com.unilocal.app.ui.screens
+package com.unilocal.app.ui.screens.user
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,6 +24,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,7 +34,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.unilocal.app.R
@@ -49,6 +48,17 @@ fun HomeScreen(navController: NavController) {
     val usersViewModel = mainViewModel.usersViewModel
     val placesViewModel = mainViewModel.placesViewModel
     var expanded by remember { mutableStateOf(false) }
+    val currentUser = usersViewModel.currentUser
+    if (currentUser == null) {
+        // Usuario no logueado → redirigir
+        LaunchedEffect(Unit) {
+            navController.navigate(NavRoutes.Login.route) {
+                popUpTo(NavRoutes.Home.route) { inclusive = true }
+            }
+        }
+        return
+    }
+
 
     Scaffold(
         topBar = {
@@ -78,6 +88,7 @@ fun HomeScreen(navController: NavController) {
                             text = { Text(stringResource(R.string.cerrar_sesion)) },
                             onClick = {
                                 expanded = false
+                                usersViewModel.clearCurrentUser() // ✅ limpia usuario actual
                                 navController.navigate(NavRoutes.Login.route) {
                                     popUpTo(NavRoutes.Home.route) { inclusive = true }
                                 }

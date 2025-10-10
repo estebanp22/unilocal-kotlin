@@ -9,4 +9,9 @@ sealed class NavRoutes(val route: String) {
     object EditProfile : NavRoutes("editProfile")
     object MyPlaces : NavRoutes("myPlaces")
 
+    // Admin
+    object AdminPanel : NavRoutes("admin_panel")
+    object RequestList : NavRoutes("request_list")
+    object RequestHistory : NavRoutes("request_history")
+
 }

@@ -1,4 +1,4 @@
-package com.unilocal.app.ui.screens
+package com.unilocal.app.ui.screens.user
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
@@ -14,20 +14,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.unilocal.app.model.City
-import com.unilocal.app.model.Role
-import com.unilocal.app.model.User
-import com.unilocal.app.viewmodel.UsersViewModel
+import com.unilocal.app.viewmodel.LocalMainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterScreen(
     navController: NavController,
     onRegister: () -> Unit,
-    usersViewModel: UsersViewModel = viewModel()
 ) {
+    val mainViewModel = LocalMainViewModel.current
+    val usersViewModel = mainViewModel.usersViewModel
+
     var name by rememberSaveable { mutableStateOf("") }
     var username by rememberSaveable { mutableStateOf("") }
     var email by rememberSaveable { mutableStateOf("") }
@@ -138,6 +137,7 @@ fun RegisterScreen(
             Button(
                 onClick = {
                     when {
+
                         name.isBlank() || username.isBlank() || email.isBlank() ||
                                 password.isBlank() || confirmPassword.isBlank() -> {
                             Toast.makeText(context, "Completa todos los campos", Toast.LENGTH_SHORT).show()
@@ -154,6 +154,7 @@ fun RegisterScreen(
                         else -> {
                             usersViewModel.registerUser(name, username, email, password, selectedCity)
                             Toast.makeText(context, "Usuario registrado correctamente", Toast.LENGTH_SHORT).show()
+                            usersViewModel.printUsers()
                             onRegister()
                         }
                     }

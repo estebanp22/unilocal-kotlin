@@ -1,4 +1,4 @@
-package co.edu.eam.lugaresapp.viewmodel
+package com.unilocal.app.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.unilocal.app.model.Review

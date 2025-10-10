@@ -4,85 +4,32 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import com.unilocal.app.ui.NavRoutes
-import com.unilocal.app.ui.screens.EditProfileScreen
-import com.unilocal.app.ui.screens.HomeScreen
-import com.unilocal.app.ui.screens.LoginScreen
-import com.unilocal.app.ui.screens.MyPlacesScreen
-import com.unilocal.app.ui.screens.RegisterPlaceScreen
-import com.unilocal.app.ui.screens.RegisterScreen
-import com.unilocal.app.ui.theme.UniLocalTheme
-
+import androidx.activity.viewModels
+import androidx.compose.runtime.CompositionLocalProvider
+import com.unilocal.app.navigation.Navigation
+//import com.unilocal.app.ui.theme.UniLocalAppTheme
+import com.unilocal.app.viewmodel.*
 class MainActivity : ComponentActivity() {
+
+    private val usersViewModel: UsersViewModel by viewModels()
+    private val placesViewModel: PlacesViewModel by viewModels()
+    private val reviewsViewModel: ReviewsViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            UniLocalApp()
-        }
-    }
-}
-
-@Composable
-fun UniLocalApp() {
-    val navController = rememberNavController()
-
-    NavHost(
-        navController = navController,
-        startDestination = NavRoutes.Login.route
-    ) {
-        composable(NavRoutes.Login.route) {
-            LoginScreen(
-                onNavigateToRegister = { navController.navigate(NavRoutes.Register.route) },
-                onNavigateToHome = { navController.navigate(NavRoutes.Home.route) }
+            val mainViewModel = MainViewModel(
+                placesViewModel,
+                reviewsViewModel,
+                usersViewModel
             )
-        }
-        composable(NavRoutes.Register.route) {
-            RegisterScreen(navController = navController,
-                onRegister = { navController.navigate(NavRoutes.Home.route) }
-            )
-        }
-        composable(NavRoutes.Home.route) {
-            HomeScreen(navController = navController)
-        }
-        composable(NavRoutes.RegisterPlace.route) {
-            RegisterPlaceScreen(navController = navController)
-        }
-        composable(NavRoutes.MyPlaces.route) {
-            //val placesViewModel: PlacesViewModel = viewModel()
 
-            MyPlacesScreen(
-                //userId = FirebaseAuth.getInstance().currentUser?.uid ?: "",
-                userId = "3",
-                onEditPlace = { placeId ->
-                    navController.navigate("edit_place/$placeId")
-                },
-                onDeletePlace = { placeId ->
-                    //placesViewModel.deletePlace(placeId)
-                },
-                onBack = { navController.popBackStack() }, // 🔹 acción volver
-                //placesViewModel = placesViewModel
-            )
-        }
-
-
-        composable(NavRoutes.EditProfile.route) {
-            EditProfileScreen(navController = navController, onSave = {
-                navController.navigate(NavRoutes.Home.route)
+            CompositionLocalProvider(
+                LocalMainViewModel provides mainViewModel
+            ) {
+                Navigation(mainViewModel)
             }
-            )
         }
-
-
     }
 }
 

@@ -37,14 +37,17 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.unilocal.app.R
 import com.unilocal.app.model.User
+import com.unilocal.app.viewmodel.LocalMainViewModel
 import com.unilocal.app.viewmodel.UsersViewModel
 
 @Composable
 fun LoginScreen(
     onNavigateToRegister: () -> Unit,
-    onNavigateToHome: () -> Unit,
-    usersViewModel: UsersViewModel = viewModel()
+    onNavigateToHome: () -> Unit
 ) {
+    val mainViewModel = LocalMainViewModel.current
+    val usersViewModel = mainViewModel.usersViewModel
+
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
     val context = LocalContext.current
@@ -102,6 +105,8 @@ fun LoginScreen(
             ) {
                 Button(
                     onClick = {
+                        usersViewModel.printUsers() // 👈 Aquí imprime la lista antes de intentar el login
+
                         val user: User? = usersViewModel.login(email.trim(), password)
                         if (user != null) {
                             Toast.makeText(context, "Bienvenido ${user.name}", Toast.LENGTH_SHORT).show()
@@ -112,7 +117,8 @@ fun LoginScreen(
                     },
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF7B1FA2))
-                ) {
+                )
+                {
                     Icon(Icons.Default.ArrowForward, contentDescription = null)
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(stringResource(R.string.btn_login))

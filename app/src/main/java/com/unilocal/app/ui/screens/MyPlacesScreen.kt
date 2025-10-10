@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
+import com.unilocal.app.viewmodel.LocalMainViewModel
 import com.unilocal.app.viewmodel.PlacesViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -30,9 +31,11 @@ fun MyPlacesScreen(
     userId: String,
     onEditPlace: (String) -> Unit = {},
     onDeletePlace: (String) -> Unit = {},
-    onBack: () -> Unit = {}, // 🔹 nuevo parámetro
-    placesViewModel: PlacesViewModel = viewModel()
+    onBack: () -> Unit = {}
 ) {
+    val mainViewModel = LocalMainViewModel.current
+    val placesViewModel = mainViewModel.placesViewModel
+
     val places by placesViewModel.places.collectAsState()
     val userPlaces = remember(places) { places.filter { it.ownerId == userId } }
 

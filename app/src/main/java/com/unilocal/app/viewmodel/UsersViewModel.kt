@@ -69,4 +69,28 @@ class UsersViewModel: ViewModel(){
         return _users.value.find { it.email == email && it.password == password }
     }
 
+    fun registerUser(name: String, username: String, email: String, password: String, city: City) {
+        val nextId = (_users.value.size + 1).toString()
+        val user = User(
+            id = nextId,
+            name = name,
+            username = username,
+            email = email,
+            password = password,
+            role = Role.USER,
+            city = city
+        )
+        _users.value = _users.value + user
+    }
+
+    fun printUsers() {
+        println("=== Lista de usuarios actuales ===")
+        _users.value.forEach { user ->
+            println("ID: ${user.id}, Nombre: ${user.name}, Email: ${user.email}, Username: ${user.username}, Password: ${user.password}, Ciudad: ${user.city.displayName}")
+        }
+        println("=== Fin de la lista ===")
+    }
+
+
+
 }

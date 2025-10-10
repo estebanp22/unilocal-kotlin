@@ -38,12 +38,16 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.unilocal.app.R
-import com.unilocal.app.ui.NavRoutes
+import com.unilocal.app.navigation.NavRoutes
+import com.unilocal.app.viewmodel.LocalMainViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(navController: NavController) {
+    val mainViewModel = LocalMainViewModel.current
+    val usersViewModel = mainViewModel.usersViewModel
+    val placesViewModel = mainViewModel.placesViewModel
     var expanded by remember { mutableStateOf(false) }
 
     Scaffold(

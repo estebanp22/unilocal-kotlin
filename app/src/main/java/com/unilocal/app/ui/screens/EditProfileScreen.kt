@@ -22,12 +22,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.unilocal.app.R
+import com.unilocal.app.viewmodel.LocalMainViewModel
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditProfileScreen(
     navController: NavController,
     onSave: () -> Unit
 ) {
+    val mainViewModel = LocalMainViewModel.current
+    val usersViewModel = mainViewModel.usersViewModel
+
     Scaffold(
         topBar = {
             TopAppBar(

@@ -1,4 +1,4 @@
-package com.unilocal.app.ui
+package com.unilocal.app.navigation
 
 sealed class NavRoutes(val route: String) {
     object Login : NavRoutes("login")

@@ -1,5 +1,7 @@
 package com.unilocal.app.ui.screens.user
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -31,23 +33,29 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.unilocal.app.R
 import com.unilocal.app.navigation.NavRoutes
 import com.unilocal.app.viewmodel.LocalMainViewModel
 
+// ===== Mapbox (SOLO lo básico que sí existe en 11.9.1) =====
+import com.mapbox.geojson.Point
+import com.mapbox.maps.extension.compose.MapboxMap
+import com.mapbox.maps.extension.compose.animation.viewport.rememberMapViewportState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(navController: NavController) {
     val mainViewModel = LocalMainViewModel.current
     val usersViewModel = mainViewModel.usersViewModel
-    val placesViewModel = mainViewModel.placesViewModel
+
     var expanded by remember { mutableStateOf(false) }
+    var searchText by remember { mutableStateOf("") }
+
     val currentUser = usersViewModel.currentUser
     if (currentUser == null) {
         // Usuario no logueado → redirigir
@@ -59,6 +67,14 @@ fun HomeScreen(navController: NavController) {
         return
     }
 
+    // === Estado de la cámara inicial (ej: Bogotá) ===
+    val mapViewportState = rememberMapViewportState {
+        setCameraOptions {
+            center(Point.fromLngLat(-75.681111, 4.533889)) // Armenia, Quindío
+            zoom(14.0)
+
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -72,7 +88,6 @@ fun HomeScreen(navController: NavController) {
                         )
                     }
 
-                    // Menú flotante al presionar el ícono
                     DropdownMenu(
                         expanded = expanded,
                         onDismissRequest = { expanded = false }
@@ -88,7 +103,7 @@ fun HomeScreen(navController: NavController) {
                             text = { Text(stringResource(R.string.cerrar_sesion)) },
                             onClick = {
                                 expanded = false
-                                usersViewModel.clearCurrentUser() // ✅ limpia usuario actual
+                                usersViewModel.clearCurrentUser()
                                 navController.navigate(NavRoutes.Login.route) {
                                     popUpTo(NavRoutes.Home.route) { inclusive = true }
                                 }
@@ -113,7 +128,7 @@ fun HomeScreen(navController: NavController) {
                 )
                 NavigationBarItem(
                     selected = false,
-                    onClick = {navController.navigate(NavRoutes.RegisterPlace.route)},
+                    onClick = { navController.navigate(NavRoutes.RegisterPlace.route) },
                     icon = {
                         Icon(
                             imageVector = Icons.Default.Add,
@@ -124,7 +139,7 @@ fun HomeScreen(navController: NavController) {
                 )
                 NavigationBarItem(
                     selected = false,
-                    onClick = {navController.navigate(NavRoutes.MyPlaces.route)},
+                    onClick = { navController.navigate(NavRoutes.MyPlaces.route) },
                     icon = {
                         Icon(
                             imageVector = Icons.Default.Place,
@@ -141,17 +156,18 @@ fun HomeScreen(navController: NavController) {
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            // Simulación del mapa
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.LightGray)
+
+            // ======= MAPA REAL DE MAPBOX =======
+            MapboxMap(
+                modifier = Modifier.fillMaxSize(),
+                mapViewportState = mapViewportState
+                // Sin estilo custom: usa el estilo default de Mapbox
             )
 
-            // Barra de búsqueda
+            // ======= BARRA DE BÚSQUEDA FLOTANTE =======
             OutlinedTextField(
-                value = "",
-                onValueChange = {},
+                value = searchText,
+                onValueChange = { searchText = it },
                 placeholder = { Text(stringResource(R.string.txt_search_place)) },
                 leadingIcon = {
                     Icon(
@@ -169,4 +185,3 @@ fun HomeScreen(navController: NavController) {
         }
     }
 }
-

@@ -41,6 +41,15 @@ android {
 
 dependencies {
     implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation("io.coil-kt:coil-compose:2.4.0")
+
+    val mapboxVersion = "11.9.1"
+
+    // Maps SDK
+    implementation("com.mapbox.maps:android:$mapboxVersion")
+
+    // Jetpack Compose Extension
+    implementation("com.mapbox.extension:maps-compose:$mapboxVersion")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
